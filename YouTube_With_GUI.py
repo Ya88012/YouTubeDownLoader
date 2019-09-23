@@ -4,8 +4,6 @@ from tkinter import filedialog
 import pytube
 import codecs
 import subprocess
-import requests
-import time
 
 #用於判斷使用者下載需求的變數開關
 #確認次數、影片格式、畫質優劣
@@ -116,9 +114,7 @@ def Save_As():
 #定義確認按鈕的函式
 def Confirm():
 	global ConfirmTimes, Format_Choice, Picture_Quality, Flag1, Flag2, filename
-	if ConfirmTimes == 0:
-		Var_Choice.set("未輸入影音網址，請重新操作。")
-	elif ConfirmTimes == 1:
+	if ConfirmTimes == 1:
 		if Var_ChoiceInput.get() == "1" and Flag1 != 1:
 			Format_Choice = 1
 			Var_Choice.set("已確認下載格式：MP3檔\n若要重新選擇請輸入0.")
@@ -210,11 +206,6 @@ Gui = tkinter.Tk()
 Gui.title("YouTube下載器OAO#")
 Gui.resizable(0, 0)
 Gui.geometry(str(width)+"x"+str(height))
-ConfirmTimes = 0
-Format_Choice = -1
-Picture_Quality = -1
-Flag1 = -1
-Flag2 = -1
 
 #建立動態字串
 Var_UrlInput = tkinter.StringVar()
