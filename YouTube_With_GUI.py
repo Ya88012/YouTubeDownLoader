@@ -93,7 +93,8 @@ def Get_Info():
 					ConfirmTimes += 1
 
 	except Exception as Error:
-		print(Error)
+		Var_UrlInput.set("")
+		Var_Title.set("原因：{}".format(Error))
 
 #定義尋訪按鈕的函式
 def Save_As():
