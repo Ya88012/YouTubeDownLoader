@@ -4,6 +4,9 @@ from tkinter import filedialog
 import pytube
 import codecs
 import subprocess
+import requests
+from PIL import ImageTk
+from PIL import Image
 
 #用於判斷使用者下載需求的變數開關
 #確認次數、影片格式、畫質優劣
@@ -23,6 +26,15 @@ def Get_Info():
 			Flag1 = -1
 			Flag2 = -1
 			YT_Info = pytube.YouTube(Var_UrlInput.get())
+
+			WebContent = requests.get(YT_Info.thumbnail_url).content
+			Picture = codecs.open("{}.png".format("Temp_Picture"), mode="wb+")
+			Picture.write(WebContent)
+			Picture.close()
+			img = ImageTk.PhotoImage(Image.open("Temp_Picture.png"))
+			Picture_Display.config(image=img)
+			Picture_Display.image = img
+
 			Previous = Var_UrlInput.get()
 			Var_Title.set(YT_Info.title)
 			ConfirmTimes += 1
@@ -96,6 +108,11 @@ def Get_Info():
 		Var_UrlInput.set("")
 		Var_Title.set("原因：{}".format(Error))
 		Var_Choice.set("")
+		CheckButton["text"] = "Check#"
+		img = ImageTk.PhotoImage(Image.open("YouTube_icon.png"))
+		Picture_Display.config(image=img)
+		Picture_Display.image = img
+		# print(Error)
 
 #定義尋訪按鈕的函式
 def Save_As():
@@ -222,11 +239,13 @@ Var_DownloadCheck = tkinter.StringVar()
 #建立視窗元件
 VideoUrlEntry = ttk.Entry(Gui, width=30, textvariable=Var_UrlInput)
 CheckButton = ttk.Button(Gui, width=10, text="Check#", command=Get_Info)
-Title = ttk.Label(Gui, width=30, textvariable=Var_Title)
+Title = ttk.Label(Gui, width=100, textvariable=Var_Title)
 AddressButton = ttk.Button(Gui, width=3, text="...", command=Save_As)
 ChoiceEntry = ttk.Entry(Gui, width=10, textvariable=Var_ChoiceInput)
 ChoiceButton = ttk.Button(Gui, width=5, text="確認", command=Confirm)
 ChoiceMonitor = ttk.Label(Gui, width=30, textvariable=Var_Choice)
+img = ImageTk.PhotoImage(Image.open("YouTube_icon.png"))
+Picture_Display = ttk.Label(Gui, width=30, image=img)
 
 #調整元件位置
 VideoUrlEntry.place(x=10, y=15)
@@ -236,5 +255,6 @@ AddressButton.place(x=310, y=13)
 ChoiceEntry.place(x=10, y=200)
 ChoiceButton.place(x=95, y=198)
 ChoiceMonitor.place(x=10, y=230)
+Picture_Display.place(x=10, y=80)
 
 Gui.mainloop()
